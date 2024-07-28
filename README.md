@@ -1,66 +1,111 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Task Manager
 
-## About Laravel
+cette application permet a un utilisateur de manager ses taches : creer, modifier, supprimer ces differentes taches
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- API : https://github.com/patrickflorian/task-manager-back
+- Front: https://github.com/patrickflorian/task-manager-front
 
-## Learning Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Installation
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Backend
+Install task manager with composer
+no database configuration is needed all is stored in sqlite Database
 
-## Laravel Sponsors
+```bash
+  git clone https://github.com/patrickflorian/task-manager-back
+  cd task-manager-back
+  composer update
+  php artisan migrate --seed
+  php artisan serve
+```
+the server will start at http://localhost:8000
+    
+### Frontend
+The Frontend is done with vuejs 3, Vite as server and Vuetify as template
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Install task manager with npm
 
-### Premium Partners
+```bash
+  git clone https://github.com/patrickflorian/task-manager-front
+  cd task-manager-front
+  npm install
+  npm run dev
+```
+The project will start at http://localhost:3000
+## API Reference
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+#### Get all items
 
-## Contributing
+```http
+  GET /api/tasks
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `token` | `string` | **Required**. bearer auth token |
+| `per_page` | `int` |  Numer of items per page|
 
-## Code of Conduct
+#### Get item
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```http
+  GET /api/tasks/${id}
+```
 
-## Security Vulnerabilities
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `token` | `string` | **Required**. bearer auth token |
+| `id`      | `string` | **Required**. Id of item to fetch |
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+#### Delete item
 
-## License
+```http
+  DELETE /api/tasks/${id}
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `token` | `string` | **Required**. bearer auth token |
+| `id`      | `string` | **Required**. Id of item to delete |
+
+
+#### Update item
+
+```http
+  PUT /api/tasks/${id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `token` | `string` | **Required**. bearer auth token |
+| `id`      | `string` | **Required**. Id of item to update |
+| `title`      | `string` | **Required**. title of item to update |
+| `description`      | `string` | **Required**. Description of item to update |
+| `due_date`      | `date time` | **Required**. Due date of item to update |
+| `status`      | `string` | **Required**. status of item to update |
+
+#### Create item
+
+```http
+  POST /api/tasks/
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `token` | `string` | **Required**. bearer auth token |
+| `title`      | `string` | **Required**. title of item to create |
+| `description`      | `string` | **Required**. Description of item to create |
+| `due_date`      | `date time` | **Required**. Due date of item to create |
+| `status`      | `string` | **Required**. status of item to create |
+
+
+
+## Authors
+
+- [@patrickflorian](https://www.github.com/patrickflorian)
+
